@@ -13,8 +13,6 @@ type Language = "en" | "id";
 interface AppContextType {
   lang: Language;
   setLang: (lang: Language) => void;
-  isDark: boolean;
-  setIsDark: (isDark: boolean) => void;
   mounted: boolean;
 }
 
@@ -22,15 +20,11 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export function AppProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Language>("en");
-  const [isDark, setIsDarkState] = useState<boolean>(true);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     const savedLang = localStorage.getItem("cekih_lang") as Language;
     if (savedLang) setLangState(savedLang);
-
-    const savedTheme = localStorage.getItem("cekih_theme");
-    if (savedTheme) setIsDarkState(savedTheme === "dark");
 
     setMounted(true);
   }, []);
@@ -40,13 +34,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     localStorage.setItem("cekih_lang", newLang);
   };
 
-  const setIsDark = (dark: boolean) => {
-    setIsDarkState(dark);
-    localStorage.setItem("cekih_theme", dark ? "dark" : "light");
-  };
-
   return (
-    <AppContext.Provider value={{ lang, setLang, isDark, setIsDark, mounted }}>
+    <AppContext.Provider value={{ lang, setLang, mounted }}>
       {children}
     </AppContext.Provider>
   );

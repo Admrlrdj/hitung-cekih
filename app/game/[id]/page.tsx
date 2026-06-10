@@ -11,7 +11,7 @@ interface PageProps {
 export default function GameBoard({ params }: PageProps) {
   const { id } = use(params);
   const router = useRouter();
-  const { lang, isDark } = useApp();
+  const { lang } = useApp();
 
   const [players, setPlayers] = useState<string[]>([]);
   const [rounds, setRounds] = useState<number[][]>([]);
@@ -67,7 +67,6 @@ export default function GameBoard({ params }: PageProps) {
       }
     }
 
-    // Fallback look into history if not active
     const historyData = localStorage.getItem("cekih_history");
     if (historyData) {
       const records = JSON.parse(historyData);
@@ -157,20 +156,18 @@ export default function GameBoard({ params }: PageProps) {
       {burnNotifications.map((note, i) => (
         <div
           key={i}
-          className="border-l-2 border-red-500 bg-red-500/5 p-3 text-xs tracking-wide"
+          className="border-l-2 border-red-500 p-3 text-xs tracking-wide bg-red-500/5 text-red-400"
         >
           {note}
         </div>
       ))}
 
       {/* Responsive Table Container */}
-      <div className="overflow-x-auto border border-zinc-800/40 rounded-sm">
+      <div className="overflow-x-auto border rounded-sm border-zinc-800/40">
         <table className="w-full text-left border-collapse min-w-[500px]">
           <thead>
-            <tr className="border-b border-zinc-800/80 text-zinc-500 text-[11px] tracking-widest uppercase">
-              <th
-                className={`py-4 px-3 w-16 text-center sticky left-0 z-10 border-r ${isDark ? "bg-[#0a0a0a] border-zinc-800/80" : "bg-[#f4f4f5] border-zinc-300"}`}
-              >
+            <tr className="border-b text-zinc-500 text-[11px] tracking-widest uppercase border-zinc-800/80">
+              <th className="py-4 px-3 w-16 text-center sticky left-0 z-10 border-r bg-[#0a0a0a] border-zinc-800/80">
                 {t.round}
               </th>
               {players.map((name, i) => {
@@ -179,13 +176,7 @@ export default function GameBoard({ params }: PageProps) {
                   <th key={i} className="py-4 px-4 font-normal">
                     <div className="flex items-center gap-2">
                       <span
-                        className={
-                          leader
-                            ? isDark
-                              ? "text-zinc-100"
-                              : "text-zinc-900"
-                            : ""
-                        }
+                        className={leader ? "text-zinc-100" : "text-zinc-400"}
                       >
                         {name}
                       </span>
@@ -202,17 +193,15 @@ export default function GameBoard({ params }: PageProps) {
             {rounds.map((round, rIdx) => (
               <tr
                 key={rIdx}
-                className="border-b border-zinc-900/30 hover:bg-zinc-500/5"
+                className="border-b hover:bg-zinc-500/5 border-zinc-900/30"
               >
-                <td
-                  className={`py-3 px-3 text-center text-zinc-600 sticky left-0 z-10 border-r ${isDark ? "bg-[#0a0a0a] border-zinc-900/30" : "bg-[#f4f4f5] border-zinc-300"}`}
-                >
+                <td className="py-3 px-3 text-center text-zinc-600 sticky left-0 z-10 border-r bg-[#0a0a0a] border-zinc-900/30">
                   {rIdx + 1}
                 </td>
                 {round.map((score, pIdx) => (
                   <td
                     key={pIdx}
-                    className={`py-3 px-4 ${score < 0 ? "text-red-400" : score > 0 ? (isDark ? "text-zinc-100" : "text-zinc-900") : "text-zinc-600"}`}
+                    className={`py-3 px-4 ${score < 0 ? "text-red-400" : score > 0 ? "text-zinc-100" : "text-zinc-600"}`}
                   >
                     {score > 0 ? `+${score}` : score}
                   </td>
@@ -221,10 +210,8 @@ export default function GameBoard({ params }: PageProps) {
             ))}
           </tbody>
           <tfoot>
-            <tr className="border-t border-zinc-700 bg-zinc-500/5 text-xs">
-              <td
-                className={`py-5 px-3 font-sans text-[11px] uppercase tracking-widest text-zinc-500 text-center sticky left-0 z-10 border-r ${isDark ? "bg-[#0a0a0a] border-zinc-700" : "bg-[#f4f4f5] border-zinc-300"}`}
-              >
+            <tr className="border-t bg-zinc-500/5 text-xs border-zinc-700">
+              <td className="py-5 px-3 font-sans text-[11px] uppercase tracking-widest text-zinc-500 text-center sticky left-0 z-10 border-r bg-[#0a0a0a] border-zinc-700">
                 {t.total}
               </td>
               {currentTotals.map((total, i) => (
@@ -250,19 +237,19 @@ export default function GameBoard({ params }: PageProps) {
       <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-zinc-800/40">
         <button
           onClick={() => setShowScoreModal(true)}
-          className={`w-full sm:w-auto px-8 py-4 text-xs tracking-widest uppercase font-medium ${isDark ? "bg-zinc-100 text-zinc-950" : "bg-zinc-900 text-zinc-50"}`}
+          className="w-full sm:w-auto px-8 py-4 text-xs tracking-widest uppercase font-medium transition-colors bg-zinc-100 text-zinc-950 hover:bg-white"
         >
           {t.add}
         </button>
         <button
           onClick={handleReset}
-          className="w-full sm:w-auto px-6 py-4 text-xs tracking-widest uppercase border border-zinc-800 text-zinc-500 hover:text-zinc-400"
+          className="w-full sm:w-auto px-6 py-4 text-xs tracking-widest uppercase border transition-colors border-zinc-800 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900"
         >
           {t.reset}
         </button>
         <button
           onClick={() => router.push("/")}
-          className="w-full sm:w-auto sm:ml-auto px-6 py-4 text-xs tracking-widest uppercase text-zinc-500 hover:text-zinc-400 text-center"
+          className="w-full sm:w-auto sm:ml-auto px-6 py-4 text-xs tracking-widest uppercase text-center transition-colors text-zinc-500 hover:text-zinc-300"
         >
           {t.exit}
         </button>
@@ -270,17 +257,13 @@ export default function GameBoard({ params }: PageProps) {
 
       {/* Input Score Modal */}
       {showScoreModal && (
-        <div
-          className={`fixed inset-0 backdrop-blur-xs flex items-center justify-center p-4 z-50 ${isDark ? "bg-black/80" : "bg-zinc-500/30"}`}
-        >
-          <div
-            className={`${isDark ? "bg-[#0f0f0f] border-zinc-800" : "bg-white border-zinc-300"} border w-full max-w-sm p-6 shadow-2xl`}
-          >
+        <div className="fixed inset-0 backdrop-blur-xs flex items-center justify-center p-4 z-50 bg-black/80">
+          <div className="bg-[#0f0f0f] border-zinc-800 border w-full max-w-sm p-6 shadow-2xl">
             <form onSubmit={handleAddScore} className="space-y-5">
               {players.map((name, idx) => (
                 <div
                   key={idx}
-                  className={`flex items-center justify-between border-b pb-2 ${isDark ? "border-zinc-800/40" : "border-zinc-300"}`}
+                  className="flex items-center justify-between border-b pb-2 border-zinc-800/40"
                 >
                   <span className="text-xs uppercase tracking-wider text-zinc-500">
                     {name}
@@ -295,7 +278,7 @@ export default function GameBoard({ params }: PageProps) {
                       i[idx] = e.target.value;
                       setCurrentRoundInput(i);
                     }}
-                    className={`w-20 bg-transparent text-right text-sm font-mono focus:outline-none ${isDark ? "text-zinc-100" : "text-zinc-900"}`}
+                    className="w-20 bg-transparent text-right text-sm font-mono focus:outline-none text-zinc-100"
                   />
                 </div>
               ))}
@@ -303,13 +286,13 @@ export default function GameBoard({ params }: PageProps) {
                 <button
                   type="button"
                   onClick={() => setShowScoreModal(false)}
-                  className={`flex-1 py-3 border ${isDark ? "border-zinc-800 text-zinc-500 hover:bg-zinc-900" : "border-zinc-300 text-zinc-600 hover:bg-zinc-100"}`}
+                  className="flex-1 py-3 border border-zinc-800 text-zinc-500 hover:bg-zinc-900"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className={`flex-1 py-3 ${isDark ? "bg-zinc-100 text-zinc-950" : "bg-zinc-900 text-zinc-50"}`}
+                  className="flex-1 py-3 bg-zinc-100 text-zinc-950"
                 >
                   Save
                 </button>
@@ -321,13 +304,9 @@ export default function GameBoard({ params }: PageProps) {
 
       {/* 500 Threshold Modal */}
       {showFiveHundredModal && (
-        <div
-          className={`fixed inset-0 backdrop-blur-md flex items-center justify-center p-4 z-50 ${isDark ? "bg-black/90" : "bg-white/80"}`}
-        >
+        <div className="fixed inset-0 backdrop-blur-md flex items-center justify-center p-4 z-50 bg-black/90">
           <div className="w-full max-w-sm text-center">
-            <h3
-              className={`text-xl font-light mb-3 tracking-wide ${isDark ? "text-zinc-100" : "text-zinc-900"}`}
-            >
+            <h3 className="text-xl font-light mb-3 tracking-wide text-zinc-100">
               {t.limitTitle}
             </h3>
             <p className="text-xs text-zinc-500 leading-relaxed mb-8">
@@ -336,7 +315,7 @@ export default function GameBoard({ params }: PageProps) {
             <div className="flex flex-col gap-3 max-w-xs mx-auto text-xs uppercase tracking-widest">
               <button
                 onClick={() => setShowFiveHundredModal(false)}
-                className={`w-full py-4 ${isDark ? "bg-zinc-100 text-zinc-950" : "bg-zinc-900 text-zinc-50"}`}
+                className="w-full py-4 bg-zinc-100 text-zinc-950"
               >
                 {t.cont}
               </button>
@@ -345,7 +324,7 @@ export default function GameBoard({ params }: PageProps) {
                   saveUpdate(rounds, true);
                   router.push("/history");
                 }}
-                className={`w-full py-4 border ${isDark ? "border-zinc-800 text-zinc-400 hover:bg-zinc-900" : "border-zinc-300 text-zinc-600 hover:bg-zinc-100"}`}
+                className="w-full py-4 border border-zinc-800 text-zinc-400 hover:bg-zinc-900"
               >
                 {t.end}
               </button>
