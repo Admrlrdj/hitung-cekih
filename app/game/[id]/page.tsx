@@ -25,6 +25,13 @@ export default function GameBoard({ params }: PageProps) {
   ]);
   const [burnNotifications, setBurnNotifications] = useState<string[]>([]);
 
+  // State untuk melacak skor mana yang sedang diedit
+  const [editingScore, setEditingScore] = useState<{
+    roundIdx: number;
+    playerIdx: number;
+    value: string;
+  } | null>(null);
+
   const t = {
     en: {
       round: "Rd",
@@ -39,6 +46,7 @@ export default function GameBoard({ params }: PageProps) {
       limitDesc: "A player hit 500 points. Continue or finish?",
       cont: "Continue",
       end: "Finish Game",
+      editScore: "Edit Score",
     },
     id: {
       round: "Rnd",
@@ -53,6 +61,7 @@ export default function GameBoard({ params }: PageProps) {
       limitDesc: "Pemain mencapai 500 poin. Lanjut atau selesaikan?",
       cont: "Lanjutkan",
       end: "Selesai",
+      editScore: "Edit Skor",
     },
   }[lang];
 
@@ -141,6 +150,29 @@ export default function GameBoard({ params }: PageProps) {
     if (hit500) setShowFiveHundredModal(true);
   };
 
+  // Fungsi baru untuk menyimpan edit skor spesifik
+  const handleSaveEdit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingScore) return;
+
+    const updatedRounds = [...rounds];
+    // Copy array spesifik agar state benar-benar terupdate (immutable)
+    updatedRounds[editingScore.roundIdx] = [
+      ...updatedRounds[editingScore.roundIdx],
+    ];
+    updatedRounds[editingScore.roundIdx][editingScore.playerIdx] =
+      parseInt(editingScore.value) || 0;
+
+    setRounds(updatedRounds);
+    setEditingScore(null);
+
+    const nextTotals = calculateTotals(updatedRounds);
+    const hit500 = nextTotals.some((s) => s >= 500);
+    saveUpdate(updatedRounds, hit500 ? false : false);
+
+    if (hit500) setShowFiveHundredModal(true);
+  };
+
   const handleReset = () => {
     const reset = currentTotals.map((s) => -s);
     const updated = [...rounds, reset];
@@ -201,7 +233,15 @@ export default function GameBoard({ params }: PageProps) {
                 {round.map((score, pIdx) => (
                   <td
                     key={pIdx}
-                    className={`py-3 px-4 ${score < 0 ? "text-red-400" : score > 0 ? "text-zinc-100" : "text-zinc-600"}`}
+                    onClick={() =>
+                      setEditingScore({
+                        roundIdx: rIdx,
+                        playerIdx: pIdx,
+                        value: score.toString(),
+                      })
+                    }
+                    className={`py-3 px-4 cursor-pointer hover:bg-zinc-800/40 transition-colors ${score < 0 ? "text-red-400" : score > 0 ? "text-zinc-100" : "text-zinc-600"}`}
+                    title={t.editScore}
                   >
                     {score > 0 ? `+${score}` : score}
                   </td>
@@ -293,6 +333,51 @@ export default function GameBoard({ params }: PageProps) {
                 <button
                   type="submit"
                   className="flex-1 py-3 bg-zinc-100 text-zinc-950"
+                >
+                  Save
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Score Modal */}
+      {editingScore && (
+        <div className="fixed inset-0 backdrop-blur-xs flex items-center justify-center p-4 z-50 bg-black/80">
+          <div className="bg-[#0f0f0f] border-zinc-800 border w-full max-w-sm p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+            <form onSubmit={handleSaveEdit} className="space-y-5">
+              <div className="text-center mb-4">
+                <h3 className="text-sm font-medium text-zinc-100 uppercase tracking-widest">
+                  {t.editScore} - {players[editingScore.playerIdx]}
+                </h3>
+                <p className="text-xs text-zinc-500 mt-1">
+                  Round {editingScore.roundIdx + 1}
+                </p>
+              </div>
+              <div className="flex justify-center">
+                <input
+                  type="number"
+                  value={editingScore.value}
+                  onClick={(e) => (e.target as HTMLInputElement).select()}
+                  onChange={(e) =>
+                    setEditingScore({ ...editingScore, value: e.target.value })
+                  }
+                  className="w-full text-center bg-transparent border-b border-zinc-800 py-3 text-2xl font-mono focus:outline-none text-zinc-100 focus:border-zinc-500 transition-colors"
+                  autoFocus
+                />
+              </div>
+              <div className="flex gap-3 pt-4 text-xs uppercase tracking-widest">
+                <button
+                  type="button"
+                  onClick={() => setEditingScore(null)}
+                  className="flex-1 py-3 border border-zinc-800 text-zinc-500 hover:bg-zinc-900 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 py-3 bg-zinc-100 text-zinc-950 transition-colors hover:bg-white"
                 >
                   Save
                 </button>
