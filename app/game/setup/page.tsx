@@ -6,7 +6,7 @@ import { useApp } from "@/app/context/AppContext";
 
 export default function GameSetup() {
     const router = useRouter();
-    const { lang, isDark } = useApp();
+    const { lang } = useApp();
     const [players, setPlayers] = useState<string[]>(["", "", "", ""]);
 
     const text = {
@@ -24,10 +24,8 @@ export default function GameSetup() {
         },
     }[lang];
 
-    const borderClass = isDark
-        ? "border-zinc-800 focus:border-zinc-400"
-        : "border-zinc-300 focus:border-zinc-600";
-    const textClass = isDark ? "text-zinc-100" : "text-zinc-900";
+    const borderClass = "border-zinc-800 focus:border-zinc-400";
+    const textClass = "text-zinc-100";
 
     const handleStart = (e: React.FormEvent) => {
         e.preventDefault();
@@ -74,7 +72,7 @@ export default function GameSetup() {
                 ))}
                 <button
                     type="submit"
-                    className={`w-full mt-6 ${isDark ? "bg-zinc-100 text-zinc-950" : "bg-zinc-900 text-zinc-50"} font-medium tracking-widest uppercase text-xs py-4 transition-all`}
+                    className="w-full mt-6 bg-zinc-100 text-zinc-950 font-medium tracking-widest uppercase text-xs py-4 transition-all hover:bg-white"
                 >
                     {text.start}
                 </button>

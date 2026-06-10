@@ -14,7 +14,7 @@ interface GameSession {
 
 export default function HistoryPage() {
   const router = useRouter();
-  const { lang, isDark } = useApp();
+  const { lang } = useApp();
   const [history, setHistory] = useState<GameSession[]>([]);
 
   useEffect(() => {
@@ -49,9 +49,7 @@ export default function HistoryPage() {
   return (
     <div className="max-w-2xl mx-auto mt-4 animate-in fade-in duration-500">
       <div className="flex justify-between items-end mb-8">
-        <h2
-          className={`text-xl font-light tracking-wider ${isDark ? "text-zinc-100" : "text-zinc-900"}`}
-        >
+        <h2 className="text-xl font-light tracking-wider text-zinc-100">
           {t.title}
         </h2>
         <button
@@ -76,7 +74,7 @@ export default function HistoryPage() {
               <div
                 key={session.id}
                 onClick={() => handleRowClick(session)}
-                className={`p-5 border ${isDark ? "border-zinc-900 bg-zinc-900/20 hover:border-zinc-700" : "border-zinc-200 bg-white hover:border-zinc-400"} transition-all duration-200 ${!session.isFinished ? "cursor-pointer" : "cursor-default"}`}
+                className={`p-5 border border-zinc-900 bg-zinc-900/20 hover:border-zinc-700 transition-all duration-200 ${!session.isFinished ? "cursor-pointer" : "cursor-default"}`}
               >
                 <div className="flex justify-between items-center border-b border-zinc-500/10 pb-3 mb-3">
                   <span className="text-[10px] font-mono text-zinc-500">
@@ -94,9 +92,7 @@ export default function HistoryPage() {
                       <p className="text-[10px] tracking-wider uppercase text-zinc-500 mb-0.5 truncate">
                         {name}
                       </p>
-                      <p
-                        className={`text-base font-mono ${isDark ? "text-zinc-300" : "text-zinc-800"}`}
-                      >
+                      <p className="text-base font-mono text-zinc-300">
                         {totals[i]}
                       </p>
                     </div>

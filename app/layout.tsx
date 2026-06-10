@@ -27,7 +27,7 @@ function RootLayoutContent({ children }: { children: React.ReactNode }) {
         <h1 className="text-xl font-medium tracking-[0.15em] text-zinc-100 uppercase">
           {lang === "id" ? "Hitung " : "Cekih "}
           <span className="text-zinc-500 font-light">
-            {lang === "id" ? "Cekih" : "Tracker"}
+            {lang === "id" ? "Cekih" : "Counter"}
           </span>
         </h1>
       </header>
