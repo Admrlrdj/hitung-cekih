@@ -24,25 +24,13 @@ function RootLayoutContent({ children }: { children: React.ReactNode }) {
         {/* Toggle Language Icon */}
         <button
           onClick={() => setLang(lang === "en" ? "id" : "en")}
-          className={`p-2 rounded-md hover:bg-zinc-500/10 transition-colors ${isDark ? "text-zinc-400 hover:text-zinc-100" : "text-zinc-500 hover:text-zinc-900"}`}
+          className={`px-3 py-2 text-xs font-bold tracking-widest rounded-md hover:bg-zinc-500/10 transition-colors ${isDark ? "text-zinc-400 hover:text-zinc-100" : "text-zinc-500 hover:text-zinc-900"}`}
           title="Switch Language"
         >
-          <svg
-            className="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-            />
-          </svg>
+          {lang === "en" ? "ID" : "EN"}
         </button>
 
-        {/* Toggle Theme Icon */}
+        {/* Toggle Theme Icon (Tetap sama) */}
         <button
           onClick={() => setIsDark(!isDark)}
           className={`p-2 rounded-md hover:bg-zinc-500/10 transition-colors ${isDark ? "text-zinc-400 hover:text-zinc-100" : "text-zinc-500 hover:text-zinc-900"}`}
@@ -83,10 +71,14 @@ function RootLayoutContent({ children }: { children: React.ReactNode }) {
       <header
         className={`max-w-4xl mx-auto mb-12 flex items-center justify-between border-b ${borderClass} pb-6`}
       >
+        {/* Judul Bilingual */}
         <h1
           className={`text-xl font-medium tracking-[0.15em] ${textHighlight} uppercase`}
         >
-          Cekih <span className="text-zinc-500 font-light">Tracker</span>
+          {lang === "id" ? "Hitung " : "Cekih "}
+          <span className="text-zinc-500 font-light">
+            {lang === "id" ? "Cekih" : "Tracker"}
+          </span>
         </h1>
       </header>
 
