@@ -16,13 +16,13 @@ export default function HomePage() {
 
   const labels = {
     en: {
-      continue: "Continue",
+      continue: "Continue Session",
       newGame: "New Game",
       history: "History",
       noActive: "No active session available",
     },
     id: {
-      continue: "Lanjutkan",
+      continue: "Lanjutkan Sesi",
       newGame: "Sesi Baru",
       history: "Riwayat",
       noActive: "Tidak ada sesi aktif",
@@ -30,7 +30,7 @@ export default function HomePage() {
   }[lang];
 
   return (
-    <div className="max-w-xs mx-auto mt-24 flex flex-col gap-5 animate-in fade-in duration-300">
+    <div className="max-w-xs mx-auto mt-20 flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-6 duration-500">
       <button
         onClick={() => {
           const active = localStorage.getItem("cekih_active_session");
@@ -42,19 +42,19 @@ export default function HomePage() {
           }
         }}
         disabled={!hasActiveGame}
-        className="w-full bg-zinc-100 hover:bg-white text-zinc-950 font-medium tracking-widest uppercase text-xs py-5 transition-all duration-300 shadow-lg disabled:opacity-40 disabled:cursor-not-allowed"
+        className="w-full bg-zinc-100 hover:bg-white text-zinc-950 font-bold tracking-widest uppercase text-xs py-5 rounded-2xl transition-all shadow-[0_0_30px_-10px_rgba(255,255,255,0.2)] active:scale-95 disabled:opacity-20 disabled:shadow-none disabled:cursor-not-allowed"
       >
         {labels.continue}
       </button>
       <button
         onClick={() => router.push("/game/setup")}
-        className="w-full border hover:bg-zinc-900 text-zinc-400 border-zinc-800 font-medium tracking-widest uppercase text-xs py-5 transition-all duration-300"
+        className="w-full border border-zinc-800 bg-zinc-900/30 hover:bg-zinc-800 hover:text-zinc-200 text-zinc-400 font-medium tracking-widest uppercase text-xs py-5 rounded-2xl transition-all active:scale-95"
       >
         {labels.newGame}
       </button>
       <button
         onClick={() => router.push("/history")}
-        className="w-full border hover:bg-zinc-900 text-zinc-400 border-zinc-800 font-medium tracking-widest uppercase text-xs py-5 transition-all duration-300"
+        className="w-full border border-zinc-800 bg-zinc-900/30 hover:bg-zinc-800 hover:text-zinc-200 text-zinc-400 font-medium tracking-widest uppercase text-xs py-5 rounded-2xl transition-all active:scale-95"
       >
         {labels.history}
       </button>
